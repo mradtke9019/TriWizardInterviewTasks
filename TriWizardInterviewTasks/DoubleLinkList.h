@@ -10,10 +10,12 @@ public:
 	DoubleLinkList(T data);
 	LinkNode<T>* Head;
 	void Insert(T data, int index = 0);
+	void InsertBeginning(T data);
 	void Add(T data);
-	void Remove(int index);
-	LinkNode<T>* Find(T data, int occurrence = 1);
-	void RemoveNode(T data);
+	void RemoveByIndex(int index);
+	LinkNode<T>* FindByData(T data, int occurrence = 1);
+	LinkNode<T>* FindByIndex(int index);
+	void RemoveByData(T data);
 	void Clear();
 	int Count();
 	std::string ToString();

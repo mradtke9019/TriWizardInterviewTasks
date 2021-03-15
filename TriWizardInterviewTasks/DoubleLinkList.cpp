@@ -66,6 +66,16 @@ void DoubleLinkList<T>::Insert(T data, int index)
 	}
 }
 
+/// <summary>
+/// Specifically insert data into the beginning of the list
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <param name="data"></param>
+template <typename T>
+void DoubleLinkList<T>::InsertBeginning(T data)
+{
+	Insert(data, 0);
+}
 
 /// <summary>
 /// Append data onto end of linked list
@@ -102,7 +112,7 @@ void DoubleLinkList<T>::Add(T data)
 /// <param name="occurence">The occurence on which to return the node for. Defaults to the first occurence</param>
 /// <returns></returns>
 template <typename T>
-LinkNode<T>* DoubleLinkList<T>::Find(T data, int occurence)
+LinkNode<T>* DoubleLinkList<T>::FindByData(T data, int occurence)
 {
 	if (Count() == 0)
 		return nullptr;
@@ -124,12 +134,42 @@ LinkNode<T>* DoubleLinkList<T>::Find(T data, int occurence)
 }
 
 /// <summary>
+/// Returns nth node with the specified data.
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <param name="data">The data to search for</param>
+/// <param name="occurence">The occurence on which to return the node for. Defaults to the first occurence</param>
+/// <returns></returns>
+template <typename T>
+LinkNode<T>* DoubleLinkList<T>::FindByIndex(int index)
+{
+	if (Count() == 0)
+		return nullptr;
+	if (index >= Count() || index < 0)
+		throw std::out_of_range("Specified index out of range");
+
+	LinkNode<T>* curr = this->Head;
+	int i = 0;
+	while (curr != nullptr)
+	{
+		if (i == index)
+		{
+			return curr;
+		}
+		curr = curr->next;
+		i++;
+	}
+
+	return nullptr;
+}
+
+/// <summary>
 /// Remove node at index
 /// </summary>
 /// <typeparam name="T"></typeparam>
 /// <param name="index"></param>
 template <typename T>
-void DoubleLinkList<T>::Remove(int index)
+void DoubleLinkList<T>::RemoveByIndex(int index)
 {
 	int count = Count();
 	// Guarantee valid removal
@@ -160,9 +200,9 @@ void DoubleLinkList<T>::Remove(int index)
 }
 
 template <typename T>
-void DoubleLinkList<T>::RemoveNode(T data)
+void DoubleLinkList<T>::RemoveByData(T data)
 {
-	LinkNode<T>* node = Find(data);
+	LinkNode<T>* node = FindByData(data);
 	if (node == nullptr)
 		return;
 	if (node->prev != nullptr)
@@ -190,7 +230,7 @@ void DoubleLinkList<T>::Clear()
 {
 	while (Count() > 0) 
 	{
-		Remove(0);
+		RemoveByIndex(0);
 	}
 }
 

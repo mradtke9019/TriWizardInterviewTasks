@@ -44,17 +44,17 @@ void TestFind()
     list->Add(4);
     list->Add(5);
     list->Add(5);
-    assert(list->Find(10) == nullptr);
-    assert(list->Find(5) != nullptr);
-    assert(list->Find(0) != nullptr);
-    assert(list->Find(-1) == nullptr);
-    assert(list->Find(1)->next->data == 2);
-    assert(list->Find(1)->next->prev->data == 1);
-    assert(list->Find(0)->prev == nullptr);
+    assert(list->FindByData(10) == nullptr);
+    assert(list->FindByData(5) != nullptr);
+    assert(list->FindByData(0) != nullptr);
+    assert(list->FindByData(-1) == nullptr);
+    assert(list->FindByData(1)->next->data == 2);
+    assert(list->FindByData(1)->next->prev->data == 1);
+    assert(list->FindByData(0)->prev == nullptr);
 
-    assert(list->Find(0,1) != nullptr);
-    assert(list->Find(5,2) != nullptr);
-    assert(list->Find(5, 2)->prev->data == 5);
+    assert(list->FindByData(0,1) != nullptr);
+    assert(list->FindByData(5,2) != nullptr);
+    assert(list->FindByData(5, 2)->prev->data == 5);
     std::cout << "Find test passed\n";
 }
 
@@ -68,10 +68,13 @@ void TestRemove()
     list->Add(3);
     list->Add(4);
     list->Add(5);
-    list->Remove(0);
+    list->RemoveByIndex(0);
     assert(list->Head->data == 1);
     assert(list->Head->prev == nullptr);
     assert(list->Count() == 5);
+    list->RemoveByIndex(4);
+    assert(list->Count() == 4);
+    assert(list->FindByData(5) == nullptr);
     std::cout << "Remove test passed\n";
 }
 
@@ -84,16 +87,20 @@ void TestRemoveByData()
     list->Add(3);
     list->Add(4);
     list->Add(5);
-    list->RemoveNode(5);
+    list->RemoveByData(5);
     assert(list->Count() == 5);
-    assert(list->Find(5) == nullptr);
-    assert(list->Find(4)->next == nullptr);
-    list->RemoveNode(5);
-    list->RemoveNode(1);
-    list->RemoveNode(2);
-    list->RemoveNode(3);
-    list->RemoveNode(4);
-    list->RemoveNode(0);
+    assert(list->FindByData(5) == nullptr);
+    assert(list->FindByData(4)->next == nullptr);
+    list->RemoveByData(5);
+    list->RemoveByData(1);
+    list->RemoveByData(2);
+    list->RemoveByData(3);
+    list->RemoveByData(4);
+    list->RemoveByData(0);
+    assert(list->Count() == 0);
+    list->Insert(1);
+    assert(list->Count() == 1);
+    list->RemoveByIndex(0);
     assert(list->Count() == 0);
     std::cout << "Remove by data test passed\n";
 }
@@ -125,5 +132,9 @@ int main()
     TestRemove();
     TestRemoveByData();
     TestCount();
+    DoubleLinkList<std::string>* list = new DoubleLinkList<std::string>();
+    list->Add("123");
+    auto node = list->FindByData("123");
+    node->data;
     return 0;
 }
