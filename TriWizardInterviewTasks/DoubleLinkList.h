@@ -13,9 +13,10 @@ public:
 	void InsertBeginning(T data);
 	void Add(T data);
 	void RemoveByIndex(int index);
+	void RemoveByData(T data);
+	void RemoveAllByData(T data);
 	LinkNode<T>* FindByData(T data, int occurrence = 1);
 	LinkNode<T>* FindByIndex(int index);
-	void RemoveByData(T data);
 	void Clear();
 	int Count();
 	std::string ToString();

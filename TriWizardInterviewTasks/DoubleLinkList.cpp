@@ -6,7 +6,7 @@
 template <typename T>
 DoubleLinkList<T>::DoubleLinkList()
 {
-	this->Head = nullptr;
+	this->Head = nullptr; 
 	count = 0;
 }
 
@@ -213,6 +213,28 @@ void DoubleLinkList<T>::RemoveByData(T data)
 		this->Head = node->next;
 	this->count--;
 	delete node;
+}
+
+
+template <typename T>
+void DoubleLinkList<T>::RemoveAllByData(T data)
+{
+	// Secondary remove all function not necessarily described in scope
+	// Not very fast implementation for removal since we are restarting search over and over to remove.
+	// Would refactor this method if we wanted it to work well
+	LinkNode<T>* node = FindByData(data);
+	while (node != nullptr)
+	{
+		if (node->prev != nullptr)
+			node->prev->next = node->next;
+		if (node->next != nullptr)
+			node->next->prev = node->prev;
+		if (node == this->Head)
+			this->Head = node->next;
+		this->count--;
+		delete node;
+		node = FindByData(data);
+	}
 }
 
 template <typename T>

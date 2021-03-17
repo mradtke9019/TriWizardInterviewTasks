@@ -18,14 +18,45 @@ namespace MutagenSynthesisTask
             var pathToMod = @"D:\SteamLibrary\steamapps\common\Skyrim\Data\Skyrim.esm";
             using var mod = SkyrimMod.CreateFromBinaryOverlay(pathToMod, SkyrimRelease.SkyrimLE);
             using var state = GameEnvironment.Typical.Skyrim(SkyrimRelease.SkyrimSE);
+
+            var cells = state.LoadOrder.PriorityOrder.Cell().WinningContextOverrides(state.LinkCache).ToList();
+            var skyrimCells = state.LoadOrder.PriorityOrder.Cell().WinningContextOverrides(state.LinkCache).Where(x => x.ModKey.FileName == "Skyrim.esm").ToList();
+            var firstCell = state.LoadOrder.PriorityOrder.Cell().WinningContextOverrides(state.LinkCache).First(x => x.ModKey.FileName == "Skyrim.esm");
+
+
+            var statics = state.LoadOrder.PriorityOrder.Static().WinningContextOverrides(state.LinkCache).ToList();
+            var aStatic = statics.First();
+
+
+            var cell = cells.First(x => x.Record.EditorID == "OLDBluePalaceWing01");
+
+            var persistent = cell.Record.Persistent.ToList();
+            var temporary = cell.Record.Temporary.ToList();
+
+            foreach(var p in persistent)
+            {
+                Console.WriteLine(string.Format("{0:X}", p.FormKey.ID) +  " " + p.EditorID);
+            }
+            foreach (var t in temporary)
+            {
+                Console.WriteLine(string.Format("{0:X}", t.FormKey.ID) + " " + t.EditorID);
+            }
+
+            //Gets all nav meshes in the game
             foreach (var navContext in state.LoadOrder.PriorityOrder.ANavigationMesh().WinningContextOverrides(state.LinkCache))
             {
                 var navMesh = navContext.Record;
+
                 switch (navMesh)
                 {
                     case ICellNavigationMeshGetter cellNav:
                         // some code
                         Console.WriteLine("This is a cellNav " + cellNav.Data.Parent.ToString());
+                        var parent = navContext.Parent;
+                        if(parent.ModKey.FileName == "Skyrim.esm")
+                        {
+                            Console.WriteLine((parent.Record as ICellGetter).EditorID);
+                        }
                         break;
                     case IWorldspaceNavigationMeshGetter worldNav:
                         Console.WriteLine("This is a worldNav");
